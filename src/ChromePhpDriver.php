@@ -6,7 +6,6 @@ namespace Ycchuang99\LaravelPdfChromeDriver;
 
 use HeadlessChromium\Browser\ProcessAwareBrowser;
 use HeadlessChromium\BrowserFactory;
-use HeadlessChromium\Page;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\PdfOptions;
@@ -97,6 +96,16 @@ class ChromePhpDriver implements PdfDriver
 
         $browserFactory = new BrowserFactory($chromePath);
 
+        return $browserFactory->createBrowser($this->buildBrowserOptions());
+    }
+
+    /**
+     * Build the options array for BrowserFactory::createBrowser().
+     *
+     * @return array<string, mixed>
+     */
+    protected function buildBrowserOptions(): array
+    {
         $browserOptions = [
             'headless' => true,
             'noSandbox' => $this->config['no_sandbox'] ?? false,
@@ -130,7 +139,7 @@ class ChromePhpDriver implements PdfDriver
             $browserOptions['excludedSwitches'] = $this->config['excluded_switches'];
         }
 
-        return $browserFactory->createBrowser($browserOptions);
+        return $browserOptions;
     }
 
     /**

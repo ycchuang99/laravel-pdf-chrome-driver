@@ -12,7 +12,7 @@
     "homepage": "https://github.com/ycchuang99/laravel-pdf-chrome-driver",
     "license": "MIT",
     "require": {
-        "php": "^8.2",
+        "php": "^8.4",
         "chrome-php/chrome": "^1.0",
         "spatie/laravel-pdf": "^2.0"
     },
@@ -32,16 +32,6 @@
             "Ycchuang99\\LaravelPdfChromeDriver\\Tests\\": "tests/"
         }
     },
-    "scripts": {
-        "lint": "vendor/bin/pint",
-        "test": "vendor/bin/pest",
-        "analyse": "vendor/bin/phpstan analyse",
-        "all": [
-            "@lint",
-            "@test",
-            "@analyse"
-        ]
-    },
     "config": {
         "sort-packages": true,
         "allow-plugins": {
@@ -51,7 +41,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Ycchuang99\\LaravelPdfChromeDriver\\ChromeDriverServiceProvider"
+                "Ycchuang99\\LaravelPdfChromeDriver\\ChromePhpDriverServiceProvider"
             ]
         }
     },
