@@ -1,5 +1,5 @@
 {
-    "name": "ycchuang99/laravel-pdf-chrome-php-driver",
+    "name": "ycchuang99/laravel-pdf-chrome-driver",
     "description": "A chrome-php/chrome driver for spatie/laravel-pdf",
     "keywords": [
         "laravel",
@@ -9,14 +9,8 @@
         "chrome-php",
         "driver"
     ],
-    "homepage": "https://github.com/ycchuang99/laravel-pdf-chrome-php-driver",
+    "homepage": "https://github.com/ycchuang99/laravel-pdf-chrome-driver",
     "license": "MIT",
-    "authors": [
-        {
-            "name": "ycchuang99",
-            "role": "Developer"
-        }
-    ],
     "require": {
         "php": "^8.2",
         "chrome-php/chrome": "^1.0",
@@ -30,18 +24,18 @@
     },
     "autoload": {
         "psr-4": {
-            "Ycchuang99\\LaravelPdfChromePhpDriver\\": "src/"
+            "Ycchuang99\\LaravelPdfChromeDriver\\": "src/"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "Ycchuang99\\LaravelPdfChromePhpDriver\\Tests\\": "tests/"
+            "Ycchuang99\\LaravelPdfChromeDriver\\Tests\\": "tests/"
         }
     },
     "scripts": {
         "lint": "vendor/bin/pint",
         "test": "vendor/bin/pest",
-        "analyse": "vendor/bin/phpstan analyse"
+        "analyse": "vendor/bin/phpstan analyse src"
     },
     "config": {
         "sort-packages": true,
@@ -52,7 +46,7 @@
     "extra": {
         "laravel": {
             "providers": [
-                "Ycchuang99\\LaravelPdfChromePhpDriver\\ChromePhpDriverServiceProvider"
+                "Ycchuang99\\LaravelPdfChromeDriver\\ChromeDriverServiceProvider"
             ]
         }
     },

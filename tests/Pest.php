@@ -2,7 +2,7 @@
 
 use Orchestra\Testbench\TestCase;
 use Spatie\LaravelPdf\PdfServiceProvider;
-use Ycchuang99\LaravelPdfChromePhpDriver\ChromePhpDriverServiceProvider;
+use Ycchuang99\LaravelPdfChromeDriver\ChromePhpDriverServiceProvider;
 
 uses(TestCase::class)
     ->beforeEach(function () {

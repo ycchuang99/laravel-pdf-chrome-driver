@@ -3,7 +3,7 @@
 declare(strict_types=1);
 
 use Spatie\LaravelPdf\Drivers\PdfDriver;
-use Ycchuang99\LaravelPdfChromePhpDriver\ChromePhpDriver;
+use Ycchuang99\LaravelPdfChromeDriver\ChromePhpDriver;
 
 test('service provider registers chrome-php driver singleton', function () {
     expect($this->app->bound('laravel-pdf.driver.chrome-php'))->toBeTrue();

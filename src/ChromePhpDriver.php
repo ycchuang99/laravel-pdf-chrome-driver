@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Ycchuang99\LaravelPdfChromePhpDriver;
+namespace Ycchuang99\LaravelPdfChromeDriver;
 
 use HeadlessChromium\Browser\ProcessAwareBrowser;
 use HeadlessChromium\BrowserFactory;

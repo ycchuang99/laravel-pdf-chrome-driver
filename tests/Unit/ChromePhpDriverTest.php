@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Spatie\LaravelPdf\Enums\Orientation;
 use Spatie\LaravelPdf\PdfOptions;
-use Ycchuang99\LaravelPdfChromePhpDriver\ChromePhpDriver;
+use Ycchuang99\LaravelPdfChromeDriver\ChromePhpDriver;
 
 beforeEach(function () {
     $this->driver = new class extends ChromePhpDriver
