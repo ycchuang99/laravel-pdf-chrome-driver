@@ -114,15 +114,6 @@ You may also need custom flags:
 ],
 ```
 
-## Why chrome-php/chrome?
-
-| Feature          | Browsershot                  | chrome-php/chrome        |
-|------------------|------------------------------|--------------------------|
-| Node.js required | Yes                          | No                       |
-| Communication    | Node.js → Puppeteer → Chrome | PHP → WebSocket → Chrome |
-| Dependencies     | Node.js + npm + puppeteer    | Just Chrome binary       |
-| Setup complexity | Higher                       | Lower                    |
-
 ## Testing
 
 ```bash
