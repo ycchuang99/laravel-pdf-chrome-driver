@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use HeadlessChromium\Browser\ProcessAwareBrowser;
+use HeadlessChromium\BrowserFactory;
 use HeadlessChromium\Page;
 use HeadlessChromium\PageUtils\PagePdf;
 use Spatie\LaravelPdf\Drivers\PdfDriver;
@@ -56,6 +57,14 @@ function makeTestableDriver(array $config = []): ChromePhpDriver
         {
             return $this->getFormatDimensions($format);
         }
+
+        /**
+         * Expose protected createBrowserFactory for testing.
+         */
+        public function exposeCreateBrowserFactory(): BrowserFactory
+        {
+            return $this->createBrowserFactory();
+        }
     };
 }
 
@@ -79,6 +88,35 @@ function makeDriverWithBrowser(ProcessAwareBrowser $mockBrowser, array $config =
         protected function createBrowser(): ProcessAwareBrowser
         {
             return $this->mockBrowser;
+        }
+    };
+}
+
+/**
+ * Returns a ChromePhpDriver subclass whose createBrowserFactory() is replaced
+ * with the given mock, so tests can exercise createBrowser() without Chrome.
+ *
+ * @param  array<string, mixed>  $config
+ */
+function makeDriverWithMockFactory(BrowserFactory $mockFactory, array $config = []): ChromePhpDriver
+{
+    return new class($mockFactory, $config) extends ChromePhpDriver
+    {
+        public function __construct(
+            private readonly BrowserFactory $mockFactory,
+            array $config = [],
+        ) {
+            parent::__construct($config);
+        }
+
+        protected function createBrowserFactory(): BrowserFactory
+        {
+            return $this->mockFactory;
+        }
+
+        public function exposeCreateBrowser(): ProcessAwareBrowser
+        {
+            return $this->createBrowser();
         }
     };
 }
@@ -711,4 +749,101 @@ test('driver implements PdfDriver interface', function () {
     $driver = new ChromePhpDriver;
 
     expect($driver)->toBeInstanceOf(PdfDriver::class);
+});
+
+// ─── createBrowserFactory ────────────────────────────────────────────────────
+
+test('createBrowserFactory returns a BrowserFactory instance', function () {
+    $factory = $this->driver->exposeCreateBrowserFactory();
+
+    expect($factory)->toBeInstanceOf(BrowserFactory::class);
+});
+
+test('createBrowserFactory uses chrome_path from config', function () {
+    $driver = makeTestableDriver(['chrome_path' => '/usr/bin/google-chrome']);
+    $factory = $driver->exposeCreateBrowserFactory();
+
+    $ref = new ReflectionClass($factory);
+    $prop = $ref->getProperty('chromeBinary');
+
+    expect($prop->getValue($factory))->toBe('/usr/bin/google-chrome');
+});
+
+test('createBrowserFactory uses CHROME_PATH env variable when chrome_path config is not set', function () {
+    $previous = $_SERVER['CHROME_PATH'] ?? null;
+    $_SERVER['CHROME_PATH'] = '/opt/custom/chrome';
+
+    try {
+        $factory = $this->driver->exposeCreateBrowserFactory();
+
+        $ref = new ReflectionClass($factory);
+        $prop = $ref->getProperty('chromeBinary');
+
+        expect($prop->getValue($factory))->toBe('/opt/custom/chrome');
+    } finally {
+        if ($previous !== null) {
+            $_SERVER['CHROME_PATH'] = $previous;
+        } else {
+            unset($_SERVER['CHROME_PATH']);
+        }
+    }
+});
+
+// ─── createBrowser ───────────────────────────────────────────────────────────
+
+test('createBrowser calls factory createBrowser with the built browser options', function () {
+    $mockBrowser = $this->createMock(ProcessAwareBrowser::class);
+    $mockFactory = $this->createMock(BrowserFactory::class);
+    $mockFactory->expects($this->once())
+        ->method('createBrowser')
+        ->with($this->arrayHasKey('headless'))
+        ->willReturn($mockBrowser);
+
+    $driver = makeDriverWithMockFactory($mockFactory);
+    $result = $driver->exposeCreateBrowser();
+
+    expect($result)->toBe($mockBrowser);
+});
+
+test('createBrowser passes headless true to factory', function () {
+    $mockBrowser = $this->createMock(ProcessAwareBrowser::class);
+    $mockFactory = $this->createMock(BrowserFactory::class);
+    $mockFactory->expects($this->once())
+        ->method('createBrowser')
+        ->with($this->callback(fn (array $opts) => $opts['headless'] === true))
+        ->willReturn($mockBrowser);
+
+    makeDriverWithMockFactory($mockFactory)->exposeCreateBrowser();
+});
+
+test('createBrowser passes noSandbox from config to factory', function () {
+    $mockBrowser = $this->createMock(ProcessAwareBrowser::class);
+    $mockFactory = $this->createMock(BrowserFactory::class);
+    $mockFactory->expects($this->once())
+        ->method('createBrowser')
+        ->with($this->callback(fn (array $opts) => $opts['noSandbox'] === true))
+        ->willReturn($mockBrowser);
+
+    makeDriverWithMockFactory($mockFactory, ['no_sandbox' => true])->exposeCreateBrowser();
+});
+
+test('createBrowser passes windowSize from config to factory', function () {
+    $mockBrowser = $this->createMock(ProcessAwareBrowser::class);
+    $mockFactory = $this->createMock(BrowserFactory::class);
+    $mockFactory->expects($this->once())
+        ->method('createBrowser')
+        ->with($this->callback(fn (array $opts) => $opts['windowSize'] === [1920, 1080]))
+        ->willReturn($mockBrowser);
+
+    makeDriverWithMockFactory($mockFactory, ['window_size' => [1920, 1080]])->exposeCreateBrowser();
+});
+
+test('createBrowser returns the browser instance from factory', function () {
+    $mockBrowser = $this->createMock(ProcessAwareBrowser::class);
+    $mockFactory = $this->createMock(BrowserFactory::class);
+    $mockFactory->method('createBrowser')->willReturn($mockBrowser);
+
+    $result = makeDriverWithMockFactory($mockFactory)->exposeCreateBrowser();
+
+    expect($result)->toBe($mockBrowser);
 });

@@ -90,13 +90,15 @@ class ChromePhpDriver implements PdfDriver
         }
     }
 
+    protected function createBrowserFactory(): BrowserFactory
+    {
+        return new BrowserFactory($this->config['chrome_path'] ?? null);
+    }
+
     protected function createBrowser(): ProcessAwareBrowser
     {
-        $chromePath = $this->config['chrome_path'] ?? null;
-
-        $browserFactory = new BrowserFactory($chromePath);
-
-        return $browserFactory->createBrowser($this->buildBrowserOptions());
+        return $this->createBrowserFactory()
+            ->createBrowser($this->buildBrowserOptions());
     }
 
     /**
