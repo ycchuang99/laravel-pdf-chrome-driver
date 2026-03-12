@@ -5,22 +5,22 @@ return [
      * Path to the Chrome/Chromium binary.
      * Leave null to use auto-detection.
      */
-    'chrome_path' => env('CHROME_PHP_BINARY'),
+    'chrome_path' => env('LARAVEL_PDF_CHROME_PATH'),
 
     /*
      * Disable the sandbox for environments like Docker.
      */
-    'no_sandbox' => env('CHROME_PHP_NO_SANDBOX', false),
+    'no_sandbox' => env('LARAVEL_PDF_NO_SANDBOX', false),
 
     /*
      * Timeout in milliseconds for page load and PDF generation.
      */
-    'timeout' => env('CHROME_PHP_TIMEOUT', 30000),
+    'timeout' => env('LARAVEL_PDF_TIMEOUT', 30000),
 
     /*
      * Maximum time in seconds to wait for Chrome to start.
      */
-    'startup_timeout' => env('CHROME_PHP_STARTUP_TIMEOUT', 30),
+    'startup_timeout' => env('LARAVEL_PDF_STARTUP_TIMEOUT', 30),
 
     /*
      * Chrome window size as [width, height].
@@ -49,7 +49,7 @@ return [
     /*
      * Ignore SSL certificate errors.
      */
-    'ignore_certificate_errors' => env('CHROME_PHP_IGNORE_CERT_ERRORS', false),
+    'ignore_certificate_errors' => env('LARAVEL_PDF_IGNORE_CERT_ERRORS', false),
 
     /*
      * Chrome flags to remove from the default set.

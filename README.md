@@ -44,15 +44,15 @@ Add to your `config/laravel-pdf.php`:
 
 ```php
 'chrome-php' => [
-    'chrome_path'               => env('CHROME_PHP_BINARY'),
-    'no_sandbox'                => env('CHROME_PHP_NO_SANDBOX', false),
-    'timeout'                   => env('CHROME_PHP_TIMEOUT', 30000),
-    'startup_timeout'           => env('CHROME_PHP_STARTUP_TIMEOUT', 30),
+    'chrome_path'               => env('LARAVEL_PDF_CHROME_PATH'),
+    'no_sandbox'                => env('LARAVEL_PDF_NO_SANDBOX', false),
+    'timeout'                   => env('LARAVEL_PDF_TIMEOUT', 30000),
+    'startup_timeout'           => env('LARAVEL_PDF_STARTUP_TIMEOUT', 30),
     'window_size'               => null,
     'custom_flags'              => null,
     'user_data_dir'             => null,
     'env_variables'             => null,
-    'ignore_certificate_errors' => env('CHROME_PHP_IGNORE_CERT_ERRORS', false),
+    'ignore_certificate_errors' => env('LARAVEL_PDF_IGNORE_CERT_ERRORS', false),
     'excluded_switches'         => null,
 ],
 ```
@@ -62,11 +62,11 @@ Add to your `config/laravel-pdf.php`:
 | Variable                        | Description                            | Default       |
 |---------------------------------|----------------------------------------|---------------|
 | `LARAVEL_PDF_DRIVER`            | Set to `chrome-php` to use this driver | `browsershot` |
-| `CHROME_PHP_BINARY`             | Path to Chrome/Chromium binary         | Auto-detected |
-| `CHROME_PHP_NO_SANDBOX`         | Disable sandbox (required in Docker)   | `false`       |
-| `CHROME_PHP_TIMEOUT`            | Timeout in milliseconds                | `30000`       |
-| `CHROME_PHP_STARTUP_TIMEOUT`    | Chrome startup timeout in seconds      | `30`          |
-| `CHROME_PHP_IGNORE_CERT_ERRORS` | Ignore SSL certificate errors          | `false`       |
+| `LARAVEL_PDF_CHROME_PATH`       | Path to Chrome/Chromium binary         | Auto-detected |
+| `LARAVEL_PDF_NO_SANDBOX`        | Disable sandbox (required in Docker)   | `false`       |
+| `LARAVEL_PDF_TIMEOUT`           | Timeout in milliseconds                | `30000`       |
+| `LARAVEL_PDF_STARTUP_TIMEOUT`   | Chrome startup timeout in seconds      | `30`          |
+| `LARAVEL_PDF_IGNORE_CERT_ERRORS`| Ignore SSL certificate errors          | `false`       |
 
 ## Usage
 
@@ -101,7 +101,7 @@ Pdf::view('invoice', $data)
 When running in Docker, enable no-sandbox mode:
 
 ```env
-CHROME_PHP_NO_SANDBOX=true
+LARAVEL_PDF_NO_SANDBOX=true
 ```
 
 You may also need additional Chrome flags:
@@ -177,7 +177,7 @@ The included `Dockerfile` builds a self-contained test image with:
 - Xdebug (activated via `XDEBUG_MODE=coverage` at runtime)
 - Chromium with all required graphics libraries
 - Composer 2
-- `CHROME_PHP_NO_SANDBOX=true` preset for container environments
+- `LARAVEL_PDF_NO_SANDBOX=true` preset for container environments
 
 The project root is mounted into the container at `/app` at run time, so
 source changes are picked up immediately without rebuilding the image.
