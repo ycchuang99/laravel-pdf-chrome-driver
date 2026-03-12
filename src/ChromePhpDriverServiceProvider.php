@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Ycchuang99\LaravelPdfChromeDriver;
 
 use Illuminate\Support\ServiceProvider;
+use Spatie\LaravelPdf\Drivers\PdfDriver;
 
 class ChromePhpDriverServiceProvider extends ServiceProvider
 {
@@ -13,6 +14,10 @@ class ChromePhpDriverServiceProvider extends ServiceProvider
         $this->mergeConfigFrom(__DIR__.'/../config/chrome-php.php', 'laravel-pdf.chrome-php');
 
         $this->app->singleton('laravel-pdf.driver.chrome-php', function () {
+            return new ChromePhpDriver(config('laravel-pdf.chrome-php', []));
+        });
+
+        $this->app->singleton(PdfDriver::class, function () {
             return new ChromePhpDriver(config('laravel-pdf.chrome-php', []));
         });
     }
