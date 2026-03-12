@@ -32,12 +32,6 @@ Set the driver in your `.env` file:
 LARAVEL_PDF_DRIVER=chrome-php
 ```
 
-Or publish the config file:
-
-```bash
-php artisan vendor:publish --tag=chrome-php-config
-```
-
 ### Available Configuration Options
 
 Add to your `config/laravel-pdf.php`:
@@ -104,7 +98,6 @@ When running in Docker or CI environments, enable no-sandbox mode and add the re
 // config/laravel-pdf.php
 'chrome-php' => [
     'no_sandbox'     => true,
-    'custom_flags'   => ['--disable-gpu', '--disable-dev-shm-usage', '--disable-software-rasterizer'],
     'env_variables'  => ['HOME' => '/tmp', 'XDG_CONFIG_HOME' => '/tmp/.config'],
 ],
 ```
@@ -116,14 +109,6 @@ LARAVEL_PDF_NO_SANDBOX=true
 ```
 
 #### Why these flags?
-
-**`custom_flags`** — Chrome command-line flags passed at launch:
-
-| Flag | Purpose |
-|------|---------|
-| `--disable-gpu` | Disables GPU hardware acceleration. Headless Chrome doesn't need a GPU, and attempting to initialize graphics hardware in server environments can cause crashes or hangs. |
-| `--disable-dev-shm-usage` | Tells Chrome to use `/tmp` instead of `/dev/shm` for shared memory. Docker containers often have `/dev/shm` limited to 64 MB — Chrome can exhaust it and crash. This flag sidesteps that entirely. |
-| `--disable-software-rasterizer` | Disables the software-based GPU fallback (Swiftshader). When `--disable-gpu` is set, Chrome falls back to Swiftshader, which is wasteful for PDF generation. This disables that fallback too. |
 
 **`env_variables`** — Environment variables injected into the Chrome process:
 
