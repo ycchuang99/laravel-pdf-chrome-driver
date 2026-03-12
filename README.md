@@ -10,6 +10,12 @@ This package provides a PDF generation driver that uses `chrome-php/chrome` (a P
 - Chrome/Chromium binary installed on the system
 - `spatie/laravel-pdf` ^2.0
 
+## Version Compatibility
+
+| Package Version | PHP   | spatie/laravel-pdf | chrome-php/chrome |
+|-----------------|-------|--------------------|-------------------|
+| 1.x             | ^8.2  | ^2.0               | ^1.0              |
+
 ## Installation
 
 ```bash
@@ -53,14 +59,14 @@ Add to your `config/laravel-pdf.php`:
 
 ### Environment Variables
 
-| Variable | Description | Default |
-|---|---|---|
-| `LARAVEL_PDF_DRIVER` | Set to `chrome-php` to use this driver | `browsershot` |
-| `CHROME_PHP_BINARY` | Path to Chrome/Chromium binary | Auto-detected |
-| `CHROME_PHP_NO_SANDBOX` | Disable sandbox (for Docker) | `false` |
-| `CHROME_PHP_TIMEOUT` | Timeout in milliseconds | `30000` |
-| `CHROME_PHP_STARTUP_TIMEOUT` | Chrome startup timeout in seconds | `30` |
-| `CHROME_PHP_IGNORE_CERT_ERRORS` | Ignore SSL certificate errors | `false` |
+| Variable                        | Description                            | Default       |
+|---------------------------------|----------------------------------------|---------------|
+| `LARAVEL_PDF_DRIVER`            | Set to `chrome-php` to use this driver | `browsershot` |
+| `CHROME_PHP_BINARY`             | Path to Chrome/Chromium binary         | Auto-detected |
+| `CHROME_PHP_NO_SANDBOX`         | Disable sandbox (for Docker)           | `false`       |
+| `CHROME_PHP_TIMEOUT`            | Timeout in milliseconds                | `30000`       |
+| `CHROME_PHP_STARTUP_TIMEOUT`    | Chrome startup timeout in seconds      | `30`          |
+| `CHROME_PHP_IGNORE_CERT_ERRORS` | Ignore SSL certificate errors          | `false`       |
 
 ## Usage
 
@@ -110,12 +116,12 @@ You may also need custom flags:
 
 ## Why chrome-php/chrome?
 
-| Feature | Browsershot | chrome-php/chrome |
-|---|---|---|
-| Node.js required | Yes | No |
-| Communication | Node.js → Puppeteer → Chrome | PHP → WebSocket → Chrome |
-| Dependencies | Node.js + npm + puppeteer | Just Chrome binary |
-| Setup complexity | Higher | Lower |
+| Feature          | Browsershot                  | chrome-php/chrome        |
+|------------------|------------------------------|--------------------------|
+| Node.js required | Yes                          | No                       |
+| Communication    | Node.js → Puppeteer → Chrome | PHP → WebSocket → Chrome |
+| Dependencies     | Node.js + npm + puppeteer    | Just Chrome binary       |
+| Setup complexity | Higher                       | Lower                    |
 
 ## Testing
 
