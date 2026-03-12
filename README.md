@@ -6,7 +6,7 @@ This package provides a PDF generation driver that uses `chrome-php/chrome` (a P
 
 ## Requirements
 
-- PHP 8.2+
+- PHP 8.4+
 - Chrome or Chromium binary installed on the system
 - `spatie/laravel-pdf` ^2.0
 
@@ -96,23 +96,43 @@ Pdf::view('invoice', $data)
     ->save('/path/to/invoice.pdf');
 ```
 
-### Docker Usage
+### Docker / CI Usage
 
-When running in Docker, enable no-sandbox mode:
+When running in Docker or CI environments, enable no-sandbox mode and add the recommended Chrome flags:
+
+```php
+// config/laravel-pdf.php
+'chrome-php' => [
+    'no_sandbox'     => true,
+    'custom_flags'   => ['--disable-gpu', '--disable-dev-shm-usage', '--disable-software-rasterizer'],
+    'env_variables'  => ['HOME' => '/tmp', 'XDG_CONFIG_HOME' => '/tmp/.config'],
+],
+```
+
+Or via environment variables (for `no_sandbox` only):
 
 ```env
 LARAVEL_PDF_NO_SANDBOX=true
 ```
 
-You may also need additional Chrome flags:
+#### Why these flags?
 
-```php
-// config/laravel-pdf.php
-'chrome-php' => [
-    'no_sandbox'   => true,
-    'custom_flags' => ['--disable-gpu', '--disable-dev-shm-usage'],
-],
-```
+**`custom_flags`** — Chrome command-line flags passed at launch:
+
+| Flag | Purpose |
+|------|---------|
+| `--disable-gpu` | Disables GPU hardware acceleration. Headless Chrome doesn't need a GPU, and attempting to initialize graphics hardware in server environments can cause crashes or hangs. |
+| `--disable-dev-shm-usage` | Tells Chrome to use `/tmp` instead of `/dev/shm` for shared memory. Docker containers often have `/dev/shm` limited to 64 MB — Chrome can exhaust it and crash. This flag sidesteps that entirely. |
+| `--disable-software-rasterizer` | Disables the software-based GPU fallback (Swiftshader). When `--disable-gpu` is set, Chrome falls back to Swiftshader, which is wasteful for PDF generation. This disables that fallback too. |
+
+**`env_variables`** — Environment variables injected into the Chrome process:
+
+| Variable | Value | Purpose |
+|----------|-------|---------|
+| `HOME` | `/tmp` | Chrome needs a writable home directory for crash dumps and preferences. In restricted environments the real `$HOME` may not exist or be writable. |
+| `XDG_CONFIG_HOME` | `/tmp/.config` | Chrome follows the XDG Base Directory spec on Linux. Pointing it to `/tmp` prevents failures when the real config path doesn't exist. |
+
+> **Why aren't these the defaults?** These are environment-specific workarounds. On a local machine or bare-metal server, GPU acceleration works fine and `$HOME` is set correctly. Enabling these flags unconditionally would silently degrade performance and override system-level config paths where they are not needed.
 
 ## Testing
 
