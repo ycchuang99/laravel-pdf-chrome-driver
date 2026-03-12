@@ -35,7 +35,12 @@
     "scripts": {
         "lint": "vendor/bin/pint",
         "test": "vendor/bin/pest",
-        "analyse": "vendor/bin/phpstan analyse src"
+        "analyse": "vendor/bin/phpstan analyse",
+        "all": [
+            "@lint",
+            "@test",
+            "@analyse"
+        ]
     },
     "config": {
         "sort-packages": true,

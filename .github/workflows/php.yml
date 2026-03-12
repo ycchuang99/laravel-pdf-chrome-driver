@@ -1,0 +1,67 @@
+name: PHP QA
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    - cron: '0 0 * * *'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    continue-on-error: false
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: [ '8.2', '8.3', '8.4' ]
+
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          coverage: xdebug
+
+      - name: Validate composer.json
+        run: composer validate --no-check-lock
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v5
+        with:
+          path: vendor
+          key: ${{ runner.os }}-${{ matrix.php-version }}-php-${{ hashFiles('**/composer.json') }}
+          restore-keys: |
+            ${{ runner.os }}-${{ matrix.php-version }}-php-
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress
+
+      - name: Check Style
+        run: vendor/bin/pint --test
+
+      - name: Run PHPStan
+        run: vendor/bin/phpstan analyse --error-format=github
+
+      - name: Run Tests
+        run: vendor/bin/pest
+
+      - name: Run Tests (Coverage)
+        run: vendor/bin/pest --coverage --coverage-clover=coverage.clover
+
+      - name: Upload Coverage
+        uses: codecov/codecov-action@v5
+        if: ${{ matrix.php-version == '8.4' }}
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage.clover
+          verbose: false

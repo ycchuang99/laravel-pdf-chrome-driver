@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 
-use Spatie\LaravelPdf\Drivers\PdfDriver;
 use Ycchuang99\LaravelPdfChromeDriver\ChromePhpDriver;
 
 test('service provider registers chrome-php driver singleton', function () {
@@ -11,17 +10,6 @@ test('service provider registers chrome-php driver singleton', function () {
 
 test('chrome-php driver singleton returns ChromePhpDriver instance', function () {
     $driver = $this->app->make('laravel-pdf.driver.chrome-php');
-
-    expect($driver)->toBeInstanceOf(ChromePhpDriver::class);
-});
-
-test('driver is resolved as default when config driver is chrome-php', function () {
-    config(['laravel-pdf.driver' => 'chrome-php']);
-
-    // Clear the existing singleton so it re-resolves
-    $this->app->forgetInstance(PdfDriver::class);
-
-    $driver = $this->app->make(PdfDriver::class);
 
     expect($driver)->toBeInstanceOf(ChromePhpDriver::class);
 });

@@ -1,4 +1,4 @@
-# Laravel PDF Chrome PHP Driver
+# Chrome PHP Driver for spatie/laravel-pdf
 
 A [chrome-php/chrome](https://github.com/chrome-php/chrome) driver for [spatie/laravel-pdf](https://github.com/spatie/laravel-pdf).
 
