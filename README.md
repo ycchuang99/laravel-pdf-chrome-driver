@@ -6,7 +6,7 @@ This package provides a PDF generation driver that uses `chrome-php/chrome` (a P
 
 ## Requirements
 
-- PHP 8.4+
+- PHP 8.2+
 - Chrome or Chromium binary installed on the system
 - `spatie/laravel-pdf` ^2.0
 
@@ -14,7 +14,7 @@ This package provides a PDF generation driver that uses `chrome-php/chrome` (a P
 
 | Package Version | PHP   | spatie/laravel-pdf | chrome-php/chrome |
 |-----------------|-------|--------------------|-------------------|
-| 1.x             | ^8.4  | ^2.0               | ^1.0              |
+| 1.x             | ^8.2  | ^2.0               | ^1.0              |
 
 ## Installation
 

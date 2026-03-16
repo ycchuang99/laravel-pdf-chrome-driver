@@ -65,6 +65,25 @@ install:
 	    --no-progress
 
 # ---------------------------------------------------------------------------
+# update  – run composer update inside the container (use with caution)
+# ---------------------------------------------------------------------------
+update:
+	$(DOCKER_RUN) composer update \
+	    --prefer-dist \
+	    --no-interaction \
+	    --no-progress
+
+# ---------------------------------------------------------------------------
+# update-lowest  – run composer update with --prefer-lowest (use with caution)
+# ---------------------------------------------------------------------------
+update-lowest:
+	$(DOCKER_RUN) composer update \
+	    --prefer-lowest \
+	    --prefer-dist \
+	    --no-interaction \
+	    --no-progress
+
+# ---------------------------------------------------------------------------
 # test  – run the Pest test suite (no coverage)
 # ---------------------------------------------------------------------------
 test: install
