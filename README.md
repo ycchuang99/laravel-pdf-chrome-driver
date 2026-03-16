@@ -108,16 +108,11 @@ Or via environment variables (for `no_sandbox` only):
 LARAVEL_PDF_NO_SANDBOX=true
 ```
 
-#### Why these flags?
-
-**`env_variables`** — Environment variables injected into the Chrome process:
-
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `HOME` | `/tmp` | Chrome needs a writable home directory for crash dumps and preferences. In restricted environments the real `$HOME` may not exist or be writable. |
-| `XDG_CONFIG_HOME` | `/tmp/.config` | Chrome follows the XDG Base Directory spec on Linux. Pointing it to `/tmp` prevents failures when the real config path doesn't exist. |
-
-> **Why aren't these the defaults?** These are environment-specific workarounds. On a local machine or bare-metal server, GPU acceleration works fine and `$HOME` is set correctly. Enabling these flags unconditionally would silently degrade performance and override system-level config paths where they are not needed.
+| Variable           | Value          | Purpose                                                                                      |
+|--------------------|---------------|----------------------------------------------------------------------------------------------|
+| `no_sandbox`       | `true`        | Disables Chrome's sandbox for compatibility with Docker/CI.                                   |
+| `HOME`             | `/tmp`        | Sets a writable home directory for Chrome in restricted environments.                         |
+| `XDG_CONFIG_HOME`  | `/tmp/.config`| Sets a writable config directory to avoid permission errors.                                  |
 
 ## Testing
 
