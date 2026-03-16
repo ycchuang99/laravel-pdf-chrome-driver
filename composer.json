@@ -12,7 +12,7 @@
     "homepage": "https://github.com/ycchuang99/laravel-pdf-chrome-driver",
     "license": "MIT",
     "require": {
-        "php": "^8.4",
+        "php": "^8.2",
         "chrome-php/chrome": "^1.0",
         "spatie/laravel-pdf": "^2.0"
     },
