@@ -52,6 +52,13 @@ return [
     'ignore_certificate_errors' => env('LARAVEL_PDF_IGNORE_CERT_ERRORS', false),
 
     /*
+     * Default timeout in milliseconds for synchronous CDP messages.
+     * This controls the timeout for browser-level sync communication.
+     * Leave null to use the chrome-php library default (5000ms).
+     */
+    'send_sync_default_timeout' => env('LARAVEL_PDF_SEND_SYNC_DEFAULT_TIMEOUT'),
+
+    /*
      * Chrome flags to remove from the default set.
      * Example: ['--enable-automation']
      */

@@ -292,6 +292,16 @@ test('buildBrowserOptions omits excludedSwitches when excluded_switches is not s
     expect($this->driver->exposeBuildBrowserOptions())->not->toHaveKey('excludedSwitches');
 });
 
+test('buildBrowserOptions includes sendSyncDefaultTimeout when send_sync_default_timeout is set', function () {
+    $driver = makeTestableDriver(['send_sync_default_timeout' => 10000]);
+
+    expect($driver->exposeBuildBrowserOptions())->toHaveKey('sendSyncDefaultTimeout', 10000);
+});
+
+test('buildBrowserOptions omits sendSyncDefaultTimeout when send_sync_default_timeout is not set', function () {
+    expect($this->driver->exposeBuildBrowserOptions())->not->toHaveKey('sendSyncDefaultTimeout');
+});
+
 test('buildCdpOptions always includes printBackground', function () {
     $options = new PdfOptions;
 

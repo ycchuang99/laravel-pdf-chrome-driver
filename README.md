@@ -47,6 +47,7 @@ Add to your `config/laravel-pdf.php`:
     'user_data_dir'             => null,
     'env_variables'             => null,
     'ignore_certificate_errors' => env('LARAVEL_PDF_IGNORE_CERT_ERRORS', false),
+    'send_sync_default_timeout' => env('LARAVEL_PDF_SEND_SYNC_DEFAULT_TIMEOUT'),
     'excluded_switches'         => null,
 ],
 ```
@@ -61,6 +62,7 @@ Add to your `config/laravel-pdf.php`:
 | `LARAVEL_PDF_TIMEOUT`           | Timeout in milliseconds                | `30000`       |
 | `LARAVEL_PDF_STARTUP_TIMEOUT`   | Chrome startup timeout in seconds      | `30`          |
 | `LARAVEL_PDF_IGNORE_CERT_ERRORS`| Ignore SSL certificate errors          | `false`       |
+| `LARAVEL_PDF_SEND_SYNC_DEFAULT_TIMEOUT` | Default timeout (ms) for synchronous CDP messages | `null` (library default: 5000) |
 
 ## Usage
 

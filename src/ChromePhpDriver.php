@@ -141,6 +141,10 @@ class ChromePhpDriver implements PdfDriver
             $browserOptions['excludedSwitches'] = $this->config['excluded_switches'];
         }
 
+        if (isset($this->config['send_sync_default_timeout'])) {
+            $browserOptions['sendSyncDefaultTimeout'] = $this->config['send_sync_default_timeout'];
+        }
+
         return $browserOptions;
     }
 
