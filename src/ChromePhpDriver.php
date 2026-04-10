@@ -169,17 +169,22 @@ class ChromePhpDriver implements PdfDriver
         }
 
         if ($options->paperSize) {
-            $unit = $options->paperSize['unit'] ?? 'mm';
-            $cdpOptions['paperWidth'] = $this->toInches((float) $options->paperSize['width'], $unit);
-            $cdpOptions['paperHeight'] = $this->toInches((float) $options->paperSize['height'], $unit);
+            $paperWidth = $options->paperSize['width'] ?? null;
+            $paperHeight = $options->paperSize['height'] ?? null;
+
+            if ($paperWidth !== null && $paperHeight !== null) {
+                $unit = $options->paperSize['unit'] ?? 'mm';
+                $cdpOptions['paperWidth'] = $this->toInches((float) $paperWidth, $unit);
+                $cdpOptions['paperHeight'] = $this->toInches((float) $paperHeight, $unit);
+            }
         }
 
         if ($options->margins) {
             $unit = $options->margins['unit'] ?? 'mm';
-            $cdpOptions['marginTop'] = $this->toInches((float) $options->margins['top'], $unit);
-            $cdpOptions['marginRight'] = $this->toInches((float) $options->margins['right'], $unit);
-            $cdpOptions['marginBottom'] = $this->toInches((float) $options->margins['bottom'], $unit);
-            $cdpOptions['marginLeft'] = $this->toInches((float) $options->margins['left'], $unit);
+            $cdpOptions['marginTop'] = $this->toInches((float) ($options->margins['top'] ?? 0), $unit);
+            $cdpOptions['marginRight'] = $this->toInches((float) ($options->margins['right'] ?? 0), $unit);
+            $cdpOptions['marginBottom'] = $this->toInches((float) ($options->margins['bottom'] ?? 0), $unit);
+            $cdpOptions['marginLeft'] = $this->toInches((float) ($options->margins['left'] ?? 0), $unit);
         }
 
         if ($options->orientation === Orientation::Landscape->value) {
