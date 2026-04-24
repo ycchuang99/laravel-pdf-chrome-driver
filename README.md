@@ -1,5 +1,8 @@
 # Chrome PHP Driver for spatie/laravel-pdf
 
+> [!WARNING]
+> This package is abandoned and no longer maintained. Please use [spatie/laravel-pdf](https://github.com/spatie/laravel-pdf) instead.
+
 A [chrome-php/chrome](https://github.com/chrome-php/chrome) driver for [spatie/laravel-pdf](https://github.com/spatie/laravel-pdf).
 
 This package provides a PDF generation driver that uses `chrome-php/chrome` (a PHP library for headless Chrome) instead of Browsershot. No Node.js required — pure PHP communication with Chrome via the DevTools Protocol.
