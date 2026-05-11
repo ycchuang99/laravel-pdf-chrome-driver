@@ -349,6 +349,23 @@ test('buildCdpOptions paper size defaults unit to mm when unit key is absent', f
     expect($result['paperHeight'])->toBeFloat()->toEqualWithDelta(11.69, 0.01);
 });
 
+test('buildCdpOptions ignores incomplete paperSize values', function () {
+    $options = new PdfOptions;
+    $options->format = 'a4';
+    $options->paperSize = [
+        'width' => 210.0,
+        // height is intentionally omitted
+        'unit' => 'mm',
+    ];
+
+    $result = $this->driver->exposeBuildCdpOptions(null, null, $options);
+
+    // format should remain in effect when paperSize is incomplete
+    expect($result)
+        ->toHaveKey('paperWidth', 8.27)
+        ->toHaveKey('paperHeight', 11.69);
+});
+
 test('buildCdpOptions sets margins with unit conversion', function () {
     $options = new PdfOptions;
     $options->margins = [
@@ -365,6 +382,22 @@ test('buildCdpOptions sets margins with unit conversion', function () {
     expect($result['marginRight'])->toEqualWithDelta(1.0, 0.001);
     expect($result['marginBottom'])->toEqualWithDelta(1.0, 0.001);
     expect($result['marginLeft'])->toEqualWithDelta(1.0, 0.001);
+});
+
+test('buildCdpOptions defaults missing margin sides to zero', function () {
+    $options = new PdfOptions;
+    $options->margins = [
+        'top' => 12.7,
+        // right / bottom / left intentionally omitted
+        'unit' => 'mm',
+    ];
+
+    $result = $this->driver->exposeBuildCdpOptions(null, null, $options);
+
+    expect($result['marginTop'])->toEqualWithDelta(0.5, 0.001);
+    expect($result['marginRight'])->toEqualWithDelta(0.0, 0.001);
+    expect($result['marginBottom'])->toEqualWithDelta(0.0, 0.001);
+    expect($result['marginLeft'])->toEqualWithDelta(0.0, 0.001);
 });
 
 test('buildCdpOptions margins defaults unit to mm when unit key is absent', function () {
